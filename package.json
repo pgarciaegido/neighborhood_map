@@ -1,0 +1,11 @@
+{
+  "name": "neighborhood_map",
+  "version": "1.0.0",
+  "description": "Neighborhood map using knockout.js and google maps api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pablo Egido <pgarciaegido@gmail.com>",
+  "license": "ISC"
+}
