@@ -247,6 +247,27 @@ function AppViewModel(){
     return food;
   }
 
+  // Hides food elements
+  this.hideFood = function () {
+    // Gets all dom elements with author-place class
+    var places = document.getElementsByClassName('author-place');
+    var title;
+    // Loop through all places looking for the kind of place they are
+    for (var i = 0; i<places.length -1; i++) {
+      title = places[i].childNodes[1].innerHTML
+      // if dataservice === food, remove
+      if (places[i].getAttribute('dataservice') === 'food') {
+        places[i].remove()
+        // Loops though markers and sets them to null
+        for (var j in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
+          if (__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][j].title === title) {
+            __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][j].setMap(null)
+          }
+        }
+      }
+    }
+  };
+
   // Hides all markers
   this.hideListings = function(){
     for (var i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
@@ -261,6 +282,7 @@ function AppViewModel(){
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
     for (var i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
+      console.log(__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].title)
       __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setMap(map);
       bounds.extend(__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].position);
     }
