@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import render from './map/render';
-import { setMarkers } from './map/markers';
+import { setMarkers, showListings, hideListings } from './map/markers';
 import ko from 'knockout';
 
 /* google.maps is a GLOBAL variable, and its called directly on the HTML */
@@ -15,4 +15,9 @@ window.initMap = function() {
 
   // Set markers.
   setMarkers(map, infoWindow);
+
+  document.getElementById('show').addEventListener('click', function() {
+    showListings(map)
+  });
+  document.getElementById('hide').addEventListener('click', hideListings);
 }

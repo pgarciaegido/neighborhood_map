@@ -1,10 +1,15 @@
 import hotspots from '../models/hotspots.js';
 import { setInfowindow } from './infowindow';
+import map from './render';
 
 
 export {
-  setMarkers
+  setMarkers,
+  showListings,
+  hideListings
 }
+
+var markers = [];
 
 function setMarkers (map, infoWindow) {
   // Creates marker.
@@ -21,5 +26,25 @@ function setMarkers (map, infoWindow) {
     marker.addListener('click', function () {
       setInfowindow(this, infoWindow);
     });
+
+    markers.push(marker)
   }
+}
+
+
+
+function hideListings() {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+}
+
+function showListings(map) {
+  var bounds = new google.maps.LatLngBounds();
+  // Extend the boundaries of the map for each marker and display the marker
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+    bounds.extend(markers[i].position);
+  }
+  map.fitBounds(bounds);
 }
