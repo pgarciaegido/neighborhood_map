@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,13 +71,13 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__models_hotspots_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__infowindow__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__infowindow__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__render__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setMarkers; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return makeMarkerIcon; });
+/* unused harmony export makeMarkerIcon */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return markers; });
 
 
@@ -146,12 +146,84 @@ module.exports = function renderMap () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setInfowindow; });
+
+
+// Displays infowindow, sets marker and template.
+function setInfowindow(marker, infoWindow) {
+  infoWindow.marker = marker;
+  infoWindow.setContent('<div>' + marker.title + '</div>');
+  infoWindow.open(map, marker);
+}
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = [
+  {
+    location: { lat: 40.4492770, lng: -3.6950890 },
+    title: 'Nuit',
+    description: 'Great club',
+    service: 'nightlife'
+  },
+  {
+    location: { lat: 40.453054, lng: -3.688359 },
+    title: 'Santiago Bernabeu Stadium',
+    description: 'Real Madrid Football Stadium',
+    service: 'enterteinment'
+  },
+  {
+    location: { lat: 40.446776, lng: -3.693649 },
+    title: 'El Corte Inglés',
+    description: 'Massive shopping center',
+    service: 'shops'
+  },
+  {
+    location: { lat: 40.450082, lng: -3.691642 },
+    title: 'New York Burger',
+    description: 'Best burgers in town!',
+    service: 'food'
+  },
+  {
+    location: { lat: 40.448939, lng: -3.696191 },
+    title: 'Taxi a Manhatan',
+    description: 'Cool place to have a few drinks',
+    service: 'nightlife'
+  },
+  {
+    location: { lat: 40.450705, lng: -3.693855 },
+    title: 'Wok Garden',
+    description: 'Japanese restaurant.',
+    service: 'food'
+  },
+  {
+    location: { lat: 40.449968, lng: -3.694979 },
+    title: 'Zara',
+    description: 'Clothes & fashion',
+    service: 'shops'
+  },
+  {
+    location: { lat: 40.451927, lng: -3.692833 },
+    title: 'Azca Exhibition Hall',
+    description: 'Little museum',
+    service: 'enterteinment'
+  },
+]
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__map_markers__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_hotspots__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_hotspots__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_hotspots___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_hotspots__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__map_infowindow__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__map_infowindow__ = __webpack_require__(2);
 
 
 
@@ -161,12 +233,19 @@ module.exports = function renderMap () {
 function AppViewModel(){
   // Initial value for markers. Shown or hidden.
   this.shown = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
-  this.clicked = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true, this);
-
-  var infoWindowOpen = false;
 
   // Models
   this.hotspots = __WEBPACK_IMPORTED_MODULE_2__models_hotspots___default.a;
+
+  this.hotspotsFood = function () {
+    var food = []
+    for (var i in this.hotspots) {
+      if (this.hotspots[i].service === 'food') {
+        food.push(this.hotspots[i])
+      }
+    }
+    return food;
+  }
 
   // Hides all markers
   this.hideListings = function(){
@@ -190,16 +269,7 @@ function AppViewModel(){
     this.shown(true);
   };
 
-  this.selectLocation = function(){
-    var highlightedIcon = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* makeMarkerIcon */])('FFFF24');
-
-    for (var i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
-      if (__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].title === this.title){
-        __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setIcon(highlightedIcon)
-        this.clicked(false, this)
-      }
-    }
-  };
+  this.checkboxes = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray(['nightlife', 'food'])
 }
 
 
@@ -208,7 +278,7 @@ __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new AppViewModel(
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -17300,17 +17370,17 @@ __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new AppViewModel(
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(9)(module)))
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__map_render__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__map_render___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__map_render__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__map_markers__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__knockout_viewModel_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__knockout_viewModel_js__ = __webpack_require__(4);
 
 
 
@@ -17330,72 +17400,6 @@ window.initMap = function() {
   // Set markers.
   __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__map_markers__["a" /* setMarkers */])(map, infoWindow);
 }
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setInfowindow; });
-
-
-// Displays infowindow, sets marker and template.
-function setInfowindow(marker, infoWindow) {
-  infoWindow.marker = marker;
-  infoWindow.setContent('<div>' + marker.title + '</div>');
-  infoWindow.open(map, marker);
-}
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-module.exports = [
-  {
-    location: { lat: 40.4492770, lng: -3.6950890 },
-    title: 'Nuit',
-    description: 'Great club',
-    service: 'Nightlife'
-  },
-  {
-    location: { lat: 40.453054, lng: -3.688359 },
-    title: 'Santiago Bernabeu Stadium',
-    description: 'Real Madrid Football Stadium',
-    service: 'Enterteinment'
-  },
-  {
-    location: { lat: 40.446776, lng: -3.693649 },
-    title: 'El Corte Inglés',
-    description: 'Massive shopping center',
-    service: 'Shops'
-  },
-  {
-    location: { lat: 40.450082, lng: -3.691642 },
-    title: 'New York Burger',
-    description: 'Best burgers in town!',
-    service: 'Food'
-  },
-  {
-    location: { lat: 40.448939, lng: -3.696191 },
-    title: 'Taxi a Manhatan',
-    description: 'Cool place to have a few drinks',
-    service: 'Nightlife'
-  },
-  {
-    location: { lat: 40.450705, lng: -3.693855 },
-    title: 'Wok Garden',
-    description: 'Japanese restaurant.',
-    service: 'Food'
-  },
-  {
-    location: { lat: 40.449968, lng: -3.694979 },
-    title: 'Zara',
-    description: 'Clothes & fashion',
-    service: 'Shops'
-  },
-]
 
 
 /***/ }),

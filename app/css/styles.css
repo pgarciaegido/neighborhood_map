@@ -18,7 +18,7 @@ button{
   position: absolute;
   left: 0;
   background-color: white;
-  min-height: 100vh;
+  height: 98%;
   z-index: 1;
   width: 250px;
   padding: 10px;

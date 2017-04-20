@@ -7,12 +7,19 @@ import { setInfowindow } from '../map/infowindow';
 function AppViewModel(){
   // Initial value for markers. Shown or hidden.
   this.shown = ko.observable(true);
-  this.clicked = ko.observable(true, this);
-
-  var infoWindowOpen = false;
 
   // Models
   this.hotspots = hotspots;
+
+  this.hotspotsFood = function () {
+    var food = []
+    for (var i in this.hotspots) {
+      if (this.hotspots[i].service === 'food') {
+        food.push(this.hotspots[i])
+      }
+    }
+    return food;
+  }
 
   // Hides all markers
   this.hideListings = function(){
@@ -36,16 +43,7 @@ function AppViewModel(){
     this.shown(true);
   };
 
-  this.selectLocation = function(){
-    var highlightedIcon = makeMarkerIcon('FFFF24');
-
-    for (var i in markers) {
-      if (markers[i].title === this.title){
-        markers[i].setIcon(highlightedIcon)
-        this.clicked(false, this)
-      }
-    }
-  };
+  this.checkboxes = ko.observableArray(['nightlife', 'food'])
 }
 
 
