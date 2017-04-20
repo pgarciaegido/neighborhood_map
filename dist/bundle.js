@@ -68,17 +68,39 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+module.exports = function renderMap () {
+  // Creates map located in Orense Street, Madrid.
+  var orenseSt = {lat: 40.4492770, lng: -3.6950890};
+  var mapDom = document.getElementById('map');
+
+  // Map is a global variable.
+  window.map = new google.maps.Map(mapDom, {
+    center: orenseSt,
+    // Removes the styling options on top left corner.
+    mapTypeControl: false,
+    zoom: 15
+  });
+
+  return map;
+}
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__models_hotspots_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__infowindow__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__render__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setMarkers; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return showListings; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return hideListings; });
+/* unused harmony export showListings */
+/* unused harmony export hideListings */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return markers; });
 
 
 
@@ -106,44 +128,6 @@ function setMarkers (map, infoWindow) {
 
     markers.push(marker)
   }
-}
-
-
-
-function hideListings() {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
-  }
-}
-
-function showListings(map) {
-  var bounds = new google.maps.LatLngBounds();
-  // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-    bounds.extend(markers[i].position);
-  }
-  map.fitBounds(bounds);
-}
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-module.exports = function renderMap () {
-  // Creates map located in Orense Street, Madrid.
-  var orenseSt = {lat: 40.4492770, lng: -3.6950890};
-  var mapDom = document.getElementById('map');
-
-  var map = new google.maps.Map(mapDom, {
-    center: orenseSt,
-    // Removes the styling options on top left corner.
-    mapTypeControl: false,
-    zoom: 15
-  });
-
-  return map;
 }
 
 
@@ -23190,11 +23174,10 @@ ko.exportSymbol('nativeTemplateEngine', ko.nativeTemplateEngine);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__map_render__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__map_render__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__map_render___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__map_render__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__map_markers__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_knockout__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_knockout__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__map_markers__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__knockout_viewModel_js__ = __webpack_require__(9);
 
 
 
@@ -23212,11 +23195,6 @@ window.initMap = function() {
 
   // Set markers.
   __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__map_markers__["a" /* setMarkers */])(map, infoWindow);
-
-  document.getElementById('show').addEventListener('click', function() {
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__map_markers__["b" /* showListings */])(map)
-  });
-  document.getElementById('hide').addEventListener('click', __WEBPACK_IMPORTED_MODULE_2__map_markers__["c" /* hideListings */]);
 }
 
 
@@ -23322,6 +23300,42 @@ module.exports = function(module) {
 	}
 	return module;
 };
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__map_markers__ = __webpack_require__(1);
+
+
+
+// Knockout view model
+function AppViewModel(){
+
+  // Hides all markers
+  this.hideListings = function(){
+    for (var i = 0; i < __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */].length; i++) {
+      __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setMap(null);
+    }
+  };
+
+  // Shows all markers and centers the map
+  this.showListings = function(){
+    var bounds = new google.maps.LatLngBounds();
+    // Extend the boundaries of the map for each marker and display the marker
+    for (var i = 0; i < __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */].length; i++) {
+      __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setMap(map);
+      bounds.extend(__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].position);
+    }
+    map.fitBounds(bounds);
+  }
+}
+
+__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new AppViewModel())
 
 
 /***/ })

@@ -3,7 +3,8 @@ module.exports = function renderMap () {
   var orenseSt = {lat: 40.4492770, lng: -3.6950890};
   var mapDom = document.getElementById('map');
 
-  var map = new google.maps.Map(mapDom, {
+  // Map is a global variable.
+  window.map = new google.maps.Map(mapDom, {
     center: orenseSt,
     // Removes the styling options on top left corner.
     mapTypeControl: false,

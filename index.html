@@ -8,9 +8,10 @@
   <link rel="stylesheet" href="./app/css/styles.css">
 </head>
 <body>
+
   <div class="interaction">
-    <button id="hide">Hide Markers</button>
-    <button id="show">Show Markers</button>
+    <button data-bind="click: hideListings">Hide Markers</button>
+    <button data-bind="click: showListings">Show Markers</button>
   </div>
 
   <div id="map"></div>
