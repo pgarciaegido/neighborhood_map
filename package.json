@@ -4,8 +4,15 @@
   "description": "Neighborhood map using knockout.js and google maps api",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack --watch"
   },
   "author": "Pablo Egido <pgarciaegido@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^2.4.1"
+  },
+  "dependencies": {
+    "knockout": "^3.4.2",
+    "lodash": "^4.17.4"
+  }
 }
