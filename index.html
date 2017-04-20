@@ -10,8 +10,25 @@
 <body>
 
   <div class="interaction">
-    <button data-bind="click: hideListings">Hide Markers</button>
-    <button data-bind="click: showListings">Show Markers</button>
+    <h2 class="title">Nuevos Ministerios | Madrid</h2>
+    <div class="author-favs">
+      <p>My personal favs</p>
+
+      <div class="author-buttons">
+        <button data-bind="click: hideListings">Hide Markers</button>
+        <button data-bind="click: showListings">Show Markers</button>
+      </div>
+
+      <div data-bind="if: shown()">
+        <div data-bind="foreach: hotspots">
+          <div class="author-place" data-bind="click: $parent.selectLocation">
+            <h3 data-bind="text: title"></h3>
+            <p data-bind="text: description"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div id="map"></div>
