@@ -4,9 +4,8 @@ import { setMarkers } from './map/markers';
 
 import * as viewModel from './knockout/viewModel.js'
 
+
 /* google.maps is a GLOBAL variable, and its called directly on the HTML */
-
-
 
 // Makes initMap global, so the callback on the Google script catch it
 window.initMap = function() {

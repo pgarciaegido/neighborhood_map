@@ -6,7 +6,7 @@ module.exports = {
 
 var hotspots = [
   {
-    location: { lat: 40.4492770, lng: -3.6950890 },
+    location: { lat: 40.448837, lng: -3.695011 },
     title: 'Nuit',
     description: 'Great club',
     service: 'nightlife'

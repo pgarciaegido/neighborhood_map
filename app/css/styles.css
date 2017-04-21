@@ -12,44 +12,62 @@ button{
   background-color: #204D66;
   color: white;
   cursor: pointer;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.container {
+  display: flex;
+  height: 100vh;
 }
 
 .interaction{
-  position: absolute;
-  left: 0;
   background-color: white;
   height: 98%;
-  z-index: 1;
-  width: 250px;
+  width: 20%;
   padding: 10px;
   overflow-y: scroll;
+}
+
+#map_container{
+  width: 80%;
 }
 
 #map {
   height: 100%;
 }
 
-.selectedButton{
-  background-color: #ccc;
-  cursor: auto;
+
+.title{
+  margin: 0;
+  margin-bottom: 10px;
 }
 
-.author-buttons{
+.checkboxes {
+  padding: 10px;
+  background-color: #BAE4E5;
   margin-bottom: 10px;
+}
+
+.checkboxes span {
+  font-size: 0.8em;
 }
 
 .author-place{
   background-color: #eee;
   padding: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .author-place h3{
   margin: 0;
   margin-bottom: 5px;
+  pointer-events: none;
+
 }
 
 .author-place p {
   margin: 0;
   font-size: 0.8em;
+  pointer-events: none;
 }

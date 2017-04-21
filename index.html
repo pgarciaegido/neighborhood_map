@@ -8,39 +8,44 @@
   <link rel="stylesheet" href="./app/css/styles.css">
 </head>
 <body>
+  <div class="container">
+    <!-- INTERACTION  -->
+    <div class="interaction">
+      <h2 class="title">Nuevos Ministerios | Madrid</h2>
+      <div class="author-favs">
 
-  <div class="interaction">
-    <h2 class="title">Nuevos Ministerios | Madrid</h2>
-    <div class="author-favs">
-      <p>My personal favs</p>
-
-      <div class="author-buttons">
-        <button data-bind="click: hideListings">Hide Markers</button>
-        <button data-bind="click: showListings">Show Markers</button>
-      </div>
-
-      <div data-bind="foreach: services">
-        <input type="checkbox" data-bind="attr:{value: $data},
-                                          checked: $parent.checkboxes,
-                                          click: $parent.handleMarkers">
-        <span data-bind="text: $data"></span></br>
-      </div>
-
-      <div data-bind="foreach: hotspots">
-        <div class="author-place" data-bind="attr: {dataservice: service,
-                                                    datatitle: title},
-                                             visible: $parent.checkVisibility(service),
-                                             click: $parent.openInfowindow">
-          <h3 data-bind="text: title"></h3>
-          <p data-bind="text: description"></p>
+        <div class="author-buttons">
+          <button data-bind="click: hideListings">Hide Markers</button>
+          <button data-bind="click: showListings">Show Markers</button>
         </div>
+
+        <div class="checkboxes" data-bind="foreach: services">
+          <input type="checkbox" data-bind="attr:{value: $data},
+                                            checked: $parent.checkboxes,
+                                            click: $parent.handleMarkers">
+          <span data-bind="text: $data"></span></br>
+        </div>
+
+        <div data-bind="foreach: hotspots">
+          <div class="author-place" data-bind="attr: {dataservice: service,
+                                                      datatitle: title},
+                                               visible: $parent.checkVisibility(service),
+                                               click: $parent.openInfowindow">
+            <h3 data-bind="text: title"></h3>
+            <p data-bind="text: description"></p>
+          </div>
+        </div>
+
       </div>
 
     </div>
 
+    <!-- MAP -->
+    <div id="map_container">
+      <div id="map"></div>
+    </div>
   </div>
 
-  <div id="map"></div>
 
   <script src="./dist/bundle.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-puAmA3836qC88rlenY0lf3-gCsRLCo&callback=initMap"
