@@ -18,6 +18,7 @@ function setMarkers (map, infoWindow) {
       position: hotspots[i].location,
       map: map,
       title: hotspots[i].title,
+      service: hotspots[i].service,
       id: i
     });
 

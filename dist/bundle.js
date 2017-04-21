@@ -95,6 +95,7 @@ function setMarkers (map, infoWindow) {
       position: __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default.a[i].location,
       map: map,
       title: __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default.a[i].title,
+      service: __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default.a[i].service,
       id: i
     });
 
@@ -234,40 +235,20 @@ function AppViewModel(){
   // Initial value for markers. Shown or hidden.
   this.shown = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
 
-  // Models
   this.hotspots = __WEBPACK_IMPORTED_MODULE_2__models_hotspots___default.a;
+  this.services = ['food', 'enterteinment', 'nightlife', 'shops'];
 
-  this.hotspotsFood = function () {
-    var food = []
-    for (var i in this.hotspots) {
-      if (this.hotspots[i].service === 'food') {
-        food.push(this.hotspots[i])
-      }
-    }
-    return food;
-  }
+  this.checkboxes = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray(['food', 'enterteinment', 'nightlife', 'shops']);
 
-  // Hides food elements
-  this.hideFood = function () {
-    // Gets all dom elements with author-place class
-    var places = document.getElementsByClassName('author-place');
-    var title;
-    // Loop through all places looking for the kind of place they are
-    for (var i = 0; i<places.length -1; i++) {
-      title = places[i].childNodes[1].innerHTML
-      // if dataservice === food, remove
-      if (places[i].getAttribute('dataservice') === 'food') {
-        places[i].remove()
-        // Loops though markers and sets them to null
-        for (var j in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
-          if (__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][j].title === title) {
-            __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][j].setMap(null)
-          }
-        }
-      }
-    }
+  this.checkVisibility = function (service) {
+    // If checkboxes array contains service, return true (make it visible),
+    // otherwise return false (hide it).
+    if (this.checkboxes().indexOf(service) === -1){ return false; }
+    else{ return true; }
   };
 
+
+  // HIDES / SHOWS ALL =========================================================
   // Hides all markers
   this.hideListings = function(){
     for (var i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
@@ -277,12 +258,12 @@ function AppViewModel(){
     this.shown(false)
   };
 
+
   // Shows all markers and centers the map
   this.showListings = function(){
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
     for (var i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
-      console.log(__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].title)
       __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setMap(map);
       bounds.extend(__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].position);
     }
@@ -290,8 +271,6 @@ function AppViewModel(){
 
     this.shown(true);
   };
-
-  this.checkboxes = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray(['nightlife', 'food'])
 }
 
 

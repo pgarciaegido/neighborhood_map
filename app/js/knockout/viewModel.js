@@ -8,40 +8,20 @@ function AppViewModel(){
   // Initial value for markers. Shown or hidden.
   this.shown = ko.observable(true);
 
-  // Models
   this.hotspots = hotspots;
+  this.services = ['food', 'enterteinment', 'nightlife', 'shops'];
 
-  this.hotspotsFood = function () {
-    var food = []
-    for (var i in this.hotspots) {
-      if (this.hotspots[i].service === 'food') {
-        food.push(this.hotspots[i])
-      }
-    }
-    return food;
-  }
+  this.checkboxes = ko.observableArray(['food', 'enterteinment', 'nightlife', 'shops']);
 
-  // Hides food elements
-  this.hideFood = function () {
-    // Gets all dom elements with author-place class
-    var places = document.getElementsByClassName('author-place');
-    var title;
-    // Loop through all places looking for the kind of place they are
-    for (var i = 0; i<places.length -1; i++) {
-      title = places[i].childNodes[1].innerHTML
-      // if dataservice === food, remove
-      if (places[i].getAttribute('dataservice') === 'food') {
-        places[i].remove()
-        // Loops though markers and sets them to null
-        for (var j in markers) {
-          if (markers[j].title === title) {
-            markers[j].setMap(null)
-          }
-        }
-      }
-    }
+  this.checkVisibility = function (service) {
+    // If checkboxes array contains service, return true (make it visible),
+    // otherwise return false (hide it).
+    if (this.checkboxes().indexOf(service) === -1){ return false; }
+    else{ return true; }
   };
 
+
+  // HIDES / SHOWS ALL =========================================================
   // Hides all markers
   this.hideListings = function(){
     for (var i in markers) {
@@ -51,12 +31,12 @@ function AppViewModel(){
     this.shown(false)
   };
 
+
   // Shows all markers and centers the map
   this.showListings = function(){
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
     for (var i in markers) {
-      console.log(markers[i].title)
       markers[i].setMap(map);
       bounds.extend(markers[i].position);
     }
@@ -64,8 +44,6 @@ function AppViewModel(){
 
     this.shown(true);
   };
-
-  this.checkboxes = ko.observableArray(['nightlife', 'food'])
 }
 
 
