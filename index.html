@@ -21,24 +21,19 @@
 
       <div data-bind="foreach: services">
         <input type="checkbox" data-bind="attr:{value: $data},
-                                                checked: $parent.checkboxes">
+                                                checked: $parent.checkboxes,
+                                                click: $parent.handleMarkers">
         <span data-bind="text: $data"></span></br>
       </div>
-      <!-- <input type="checkbox" value="food" data-bind="checked: checkboxes">Food</br>
-      <input type="checkbox" value="enterteinment" data-bind="checked: checkboxes">Enterteinment</br>
-      <input type="checkbox" value="nightlife" data-bind="checked: checkboxes">Nightlife</br>
-      <input type="checkbox" value="shops" data-bind="checked: checkboxes">Shops</br> -->
 
-      <div data-bind="if: shown()">
-        <div data-bind="foreach: hotspots">
-          <div class="author-place" data-bind="attr: {dataservice: service},
-                                               visible: $parent.checkVisibility(service)">
-            <h3 data-bind="text: title"></h3>
-            <p data-bind="text: description"></p>
-          </div>
+      <div data-bind="foreach: hotspots">
+        <div class="author-place" data-bind="attr: {dataservice: service},
+                                             visible: $parent.checkVisibility(service)">
+          <h3 data-bind="text: title"></h3>
+          <p data-bind="text: description"></p>
         </div>
-
       </div>
+
     </div>
 
   </div>

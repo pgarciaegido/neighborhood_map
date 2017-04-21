@@ -87,15 +87,16 @@
 
 
 var markers = [];
+var hotspots = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__models_hotspots_js__["returnHotspots"])();
 
 function setMarkers (map, infoWindow) {
   // Creates marker.
-  for (let i = 0; i < __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default.a.length; i++) {
+  for (let i = 0; i < hotspots.length; i++) {
     var marker = new google.maps.Marker({
-      position: __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default.a[i].location,
+      position: hotspots[i].location,
       map: map,
-      title: __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default.a[i].title,
-      service: __WEBPACK_IMPORTED_MODULE_0__models_hotspots_js___default.a[i].service,
+      title: hotspots[i].title,
+      service: hotspots[i].service,
       id: i
     });
 
@@ -162,7 +163,13 @@ function setInfowindow(marker, infoWindow) {
 /* 3 */
 /***/ (function(module, exports) {
 
-module.exports = [
+module.exports = {
+  returnHotspots,
+  getServices
+}
+
+
+var hotspots = [
   {
     location: { lat: 40.4492770, lng: -3.6950890 },
     title: 'Nuit',
@@ -211,7 +218,25 @@ module.exports = [
     description: 'Little museum',
     service: 'enterteinment'
   },
-]
+];
+
+function returnHotspots () {
+  return hotspots;
+}
+
+// Get services from hotspots
+function getServices() {
+  var serv = []
+  var push = true;
+  for (let i in hotspots){
+    let s = hotspots[i].service;
+    for (let j in serv){
+      if (s === serv[j]) push = false;
+    }
+    if (push) serv.push(s)
+  }
+  return serv;
+}
 
 
 /***/ }),
@@ -232,19 +257,38 @@ module.exports = [
 
 // Knockout view model
 function AppViewModel(){
-  // Initial value for markers. Shown or hidden.
-  this.shown = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
+  var self = this;
 
-  this.hotspots = __WEBPACK_IMPORTED_MODULE_2__models_hotspots___default.a;
-  this.services = ['food', 'enterteinment', 'nightlife', 'shops'];
+  this.hotspots = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__models_hotspots__["returnHotspots"])();
+  this.services = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__models_hotspots__["getServices"])();
 
-  this.checkboxes = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray(['food', 'enterteinment', 'nightlife', 'shops']);
+  this.checkboxes = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
+
+  this.populateCheckboxes = function () {
+    for (let i in self.services) {
+      self.checkboxes.push(self.services[i]);
+    }
+  }
+  this.populateCheckboxes()
 
   this.checkVisibility = function (service) {
     // If checkboxes array contains service, return true (make it visible),
     // otherwise return false (hide it).
     if (this.checkboxes().indexOf(service) === -1){ return false; }
     else{ return true; }
+  };
+
+  this.handleMarkers = function (data, event) {
+    // Hides or show markers when clicking
+    var service = event.target.getAttribute('value');
+    for (let i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
+      if (__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].service === service) {
+        self.checkboxes().indexOf(service) === -1 ? __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setMap(null)
+                                                  : __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setMap(map)
+      }
+    }
+    // UI does not work if those dealing with checkboxes do not return true
+    return true;
   };
 
 
@@ -255,7 +299,7 @@ function AppViewModel(){
       __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setMap(null);
     }
 
-    this.shown(false)
+    this.checkboxes.removeAll();
   };
 
 
@@ -269,11 +313,9 @@ function AppViewModel(){
     }
     map.fitBounds(bounds);
 
-    this.shown(true);
+    this.populateCheckboxes();
   };
 }
-
-
 
 __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new AppViewModel());
 

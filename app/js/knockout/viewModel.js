@@ -1,23 +1,42 @@
 import ko from 'knockout';
 import { markers, makeMarkerIcon } from '../map/markers';
-import hotspots from '../models/hotspots';
+import { returnHotspots, getServices } from '../models/hotspots';
 import { setInfowindow } from '../map/infowindow';
 
 // Knockout view model
 function AppViewModel(){
-  // Initial value for markers. Shown or hidden.
-  this.shown = ko.observable(true);
+  var self = this;
 
-  this.hotspots = hotspots;
-  this.services = ['food', 'enterteinment', 'nightlife', 'shops'];
+  this.hotspots = returnHotspots();
+  this.services = getServices();
 
-  this.checkboxes = ko.observableArray(['food', 'enterteinment', 'nightlife', 'shops']);
+  this.checkboxes = ko.observableArray();
+
+  this.populateCheckboxes = function () {
+    for (let i in self.services) {
+      self.checkboxes.push(self.services[i]);
+    }
+  }
+  this.populateCheckboxes()
 
   this.checkVisibility = function (service) {
     // If checkboxes array contains service, return true (make it visible),
     // otherwise return false (hide it).
     if (this.checkboxes().indexOf(service) === -1){ return false; }
     else{ return true; }
+  };
+
+  this.handleMarkers = function (data, event) {
+    // Hides or show markers when clicking
+    var service = event.target.getAttribute('value');
+    for (let i in markers) {
+      if (markers[i].service === service) {
+        self.checkboxes().indexOf(service) === -1 ? markers[i].setMap(null)
+                                                  : markers[i].setMap(map)
+      }
+    }
+    // UI does not work if those dealing with checkboxes do not return true
+    return true;
   };
 
 
@@ -28,7 +47,7 @@ function AppViewModel(){
       markers[i].setMap(null);
     }
 
-    this.shown(false)
+    this.checkboxes.removeAll();
   };
 
 
@@ -42,10 +61,8 @@ function AppViewModel(){
     }
     map.fitBounds(bounds);
 
-    this.shown(true);
+    this.populateCheckboxes();
   };
 }
-
-
 
 ko.applyBindings(new AppViewModel());

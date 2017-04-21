@@ -1,4 +1,4 @@
-import hotspots from '../models/hotspots.js';
+import { returnHotspots } from '../models/hotspots.js';
 import { setInfowindow } from './infowindow';
 import map from './render';
 
@@ -10,6 +10,7 @@ export {
 }
 
 var markers = [];
+var hotspots = returnHotspots();
 
 function setMarkers (map, infoWindow) {
   // Creates marker.

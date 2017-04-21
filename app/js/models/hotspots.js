@@ -1,4 +1,10 @@
-module.exports = [
+module.exports = {
+  returnHotspots,
+  getServices
+}
+
+
+var hotspots = [
   {
     location: { lat: 40.4492770, lng: -3.6950890 },
     title: 'Nuit',
@@ -47,4 +53,22 @@ module.exports = [
     description: 'Little museum',
     service: 'enterteinment'
   },
-]
+];
+
+function returnHotspots () {
+  return hotspots;
+}
+
+// Get services from hotspots
+function getServices() {
+  var serv = []
+  var push = true;
+  for (let i in hotspots){
+    let s = hotspots[i].service;
+    for (let j in serv){
+      if (s === serv[j]) push = false;
+    }
+    if (push) serv.push(s)
+  }
+  return serv;
+}
