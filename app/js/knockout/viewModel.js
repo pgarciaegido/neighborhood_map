@@ -2,16 +2,20 @@ import ko from 'knockout';
 import { markers, makeMarkerIcon } from '../map/markers';
 import { returnHotspots, getServices } from '../models/hotspots';
 import { setInfowindow } from '../map/infowindow';
+import { infoWindow } from '../app';
 
 // Knockout view model
 function AppViewModel(){
   var self = this;
 
+  // Models
   this.hotspots = returnHotspots();
   this.services = getServices();
 
+  // Observable array to modify UI
   this.checkboxes = ko.observableArray();
 
+  // Fill checkboxes with services.
   this.populateCheckboxes = function () {
     for (let i in self.services) {
       self.checkboxes.push(self.services[i]);
@@ -19,12 +23,14 @@ function AppViewModel(){
   }
   this.populateCheckboxes()
 
+
   this.checkVisibility = function (service) {
     // If checkboxes array contains service, return true (make it visible),
     // otherwise return false (hide it).
     if (this.checkboxes().indexOf(service) === -1){ return false; }
     else{ return true; }
   };
+
 
   this.handleMarkers = function (data, event) {
     // Hides or show markers when clicking
@@ -39,9 +45,19 @@ function AppViewModel(){
     return true;
   };
 
+  this.openInfowindow = function (data, event) {
+    // Opens infowindow from list
+    var title = event.target.getAttribute('datatitle');
+    for (let i in markers) {
+      if (markers[i].title === title) {
+        setInfowindow(markers[i], window.infoWindow);
+      }
+    }
+  }
+
 
   // HIDES / SHOWS ALL =========================================================
-  // Hides all markers
+  // Hides all markers and empty observable array
   this.hideListings = function(){
     for (var i in markers) {
       markers[i].setMap(null);
@@ -51,7 +67,7 @@ function AppViewModel(){
   };
 
 
-  // Shows all markers and centers the map
+  // Shows all markers, centers the map and populates observable array.
   this.showListings = function(){
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker

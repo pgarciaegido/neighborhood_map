@@ -250,6 +250,8 @@ function getServices() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_hotspots__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_hotspots___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__models_hotspots__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__map_infowindow__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app__ = __webpack_require__(6);
+
 
 
 
@@ -259,11 +261,14 @@ function getServices() {
 function AppViewModel(){
   var self = this;
 
+  // Models
   this.hotspots = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__models_hotspots__["returnHotspots"])();
   this.services = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__models_hotspots__["getServices"])();
 
+  // Observable array to modify UI
   this.checkboxes = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
 
+  // Fill checkboxes with services.
   this.populateCheckboxes = function () {
     for (let i in self.services) {
       self.checkboxes.push(self.services[i]);
@@ -271,12 +276,14 @@ function AppViewModel(){
   }
   this.populateCheckboxes()
 
+
   this.checkVisibility = function (service) {
     // If checkboxes array contains service, return true (make it visible),
     // otherwise return false (hide it).
     if (this.checkboxes().indexOf(service) === -1){ return false; }
     else{ return true; }
   };
+
 
   this.handleMarkers = function (data, event) {
     // Hides or show markers when clicking
@@ -291,9 +298,19 @@ function AppViewModel(){
     return true;
   };
 
+  this.openInfowindow = function (data, event) {
+    // Opens infowindow from list
+    var title = event.target.getAttribute('datatitle');
+    for (let i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
+      if (__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].title === title) {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__map_infowindow__["a" /* setInfowindow */])(__WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i], window.infoWindow);
+      }
+    }
+  }
+
 
   // HIDES / SHOWS ALL =========================================================
-  // Hides all markers
+  // Hides all markers and empty observable array
   this.hideListings = function(){
     for (var i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */]) {
       __WEBPACK_IMPORTED_MODULE_1__map_markers__["b" /* markers */][i].setMap(null);
@@ -303,7 +320,7 @@ function AppViewModel(){
   };
 
 
-  // Shows all markers and centers the map
+  // Shows all markers, centers the map and populates observable array.
   this.showListings = function(){
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
@@ -17432,16 +17449,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* google.maps is a GLOBAL variable, and its called directly on the HTML */
 
+
+
 // Makes initMap global, so the callback on the Google script catch it
 window.initMap = function() {
   // Renders map and keeps object in 'map' variable
   var map = __WEBPACK_IMPORTED_MODULE_1__map_render___default()();
 
   // Creates infowindow.
-  var infoWindow = new google.maps.InfoWindow();
+  window.infoWindow = new google.maps.InfoWindow();
 
   // Set markers.
-  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__map_markers__["a" /* setMarkers */])(map, infoWindow);
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__map_markers__["a" /* setMarkers */])(map, window.infoWindow);
+
 }
 
 

@@ -21,14 +21,16 @@
 
       <div data-bind="foreach: services">
         <input type="checkbox" data-bind="attr:{value: $data},
-                                                checked: $parent.checkboxes,
-                                                click: $parent.handleMarkers">
+                                          checked: $parent.checkboxes,
+                                          click: $parent.handleMarkers">
         <span data-bind="text: $data"></span></br>
       </div>
 
       <div data-bind="foreach: hotspots">
-        <div class="author-place" data-bind="attr: {dataservice: service},
-                                             visible: $parent.checkVisibility(service)">
+        <div class="author-place" data-bind="attr: {dataservice: service,
+                                                    datatitle: title},
+                                             visible: $parent.checkVisibility(service),
+                                             click: $parent.openInfowindow">
           <h3 data-bind="text: title"></h3>
           <p data-bind="text: description"></p>
         </div>
