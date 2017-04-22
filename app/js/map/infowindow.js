@@ -20,16 +20,30 @@ function setInfowindow(marker, infoWindow) {
    ajax(foursquareUrl)
    .get()
    .then(function (response) {
-     let res = JSON.parse(response.response);
-     var place = res.response.venues[0];
+     console.log(response)
+     // If everything went alright
+     if (response.status === 200){
+       let res = JSON.parse(response.response);
+       var place = res.response.venues[0];
 
-     var template = setTemplate(marker, place);
+       var template = setTemplate(marker, place);
 
+       removeLoader();
+
+       infoWindow.marker = marker;
+       infoWindow.setContent(template);
+       infoWindow.open(map, marker);
+     }
+   })
+   .catch(function (error) {
      removeLoader();
+
+     var template = setTemplateError(marker)
 
      infoWindow.marker = marker;
      infoWindow.setContent(template);
      infoWindow.open(map, marker);
+
    })
 }
 
@@ -65,8 +79,23 @@ function getScreenSize () {
 }
 
 function setTemplate (marker, place) {
+
+  if (!place.url)
+    place.url = 'Website not available';
+
+  if (!place.contact.formattedPhone)
+    place.contact.formattedPhone = 'Phone number not available';
+
   return `
     <h3 class="title">${marker.title}</h3>
+    <p class="iw-web">${place.contact.formattedPhone}</p>
     <p class="iw-web">${place.url}</p>
   `;
+}
+
+function setTemplateError (marker) {
+  return `
+  <h3 class="title">${marker.title}</h3>
+  <p class="iw-web">There is been an error connecting with Foursquare api. Try again later.</p>
+  `
 }
