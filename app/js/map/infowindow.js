@@ -1,5 +1,4 @@
 import ajax from 'es-ajax';
-import { returnHotspots } from '../models/hotspots';
 import secret from '../ajax/secret';
 
 export {
@@ -8,6 +7,8 @@ export {
 
 // Displays infowindow, sets marker and template.
 function setInfowindow(marker, infoWindow) {
+  setLoader();
+
   var lat = marker.internalPosition.lat();
   var lng = marker.internalPosition.lng();
 
@@ -15,6 +16,7 @@ function setInfowindow(marker, infoWindow) {
                        &client_id=${secret.client_id}&client_secret=${secret.client_secret}
                        &v=20170421&limit=10`;
 
+   // Ajax call to Foursquare URL. Handle with promises.
    ajax(foursquareUrl)
    .get()
    .then(function (response) {
@@ -23,24 +25,48 @@ function setInfowindow(marker, infoWindow) {
 
      var template = setTemplate(marker, place);
 
+     removeLoader();
+
      infoWindow.marker = marker;
      infoWindow.setContent(template);
      infoWindow.open(map, marker);
    })
-
 }
 
+function setLoader (template) {
+  var body = document.getElementById('body');
+  var loaderBg = document.createElement('div');
+  var loader = document.createElement('div');
 
+  loaderBg.id = 'loader-bg';
+  loader.id = 'loader';
+
+  var screenSize = getScreenSize();
+
+  loader.style.top = screenSize[0] / 3 + 'px';
+  loader.style.left = screenSize[1] / 2 + 'px';
+
+  body.appendChild(loaderBg);
+  body.appendChild(loader);
+}
+
+function removeLoader () {
+  document.getElementById('loader').remove();
+  document.getElementById('loader-bg').remove();
+}
+
+// Returns screen size in an array, to place the loader properly in the center
+function getScreenSize () {
+  var arr = [];
+  arr.push(window.innerHeight)
+  arr.push(window.innerWidth)
+
+  return arr;
+}
 
 function setTemplate (marker, place) {
   return `
     <h3 class="title">${marker.title}</h3>
     <p class="iw-web">${place.url}</p>
   `;
-}
-
-var hotspots = returnHotspots();
-
-function ajaxFoursquare(lat, lng){
-
 }
