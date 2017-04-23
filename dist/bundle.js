@@ -242,9 +242,15 @@ window.initMap = function() {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_es_ajax__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_es_ajax___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_es_ajax__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ajax_secret__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ajax_secret___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ajax_secret__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__secret_secret__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__secret_secret___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__secret_secret__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loader__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loader___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__loader__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__infowindow_templates__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__infowindow_templates___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__infowindow_templates__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setInfowindow; });
+
+
 
 
 
@@ -252,97 +258,57 @@ window.initMap = function() {
 
 // Displays infowindow, sets marker and template.
 function setInfowindow(marker, infoWindow) {
-  setLoader();
 
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__loader__["setLoader"])();
+  // Gets marker coordinates
   var lat = marker.internalPosition.lat();
   var lng = marker.internalPosition.lng();
+  var title = formatNames(marker.title);
 
   var foursquareUrl = `https://api.foursquare.com/v2/venues/search?ll=${lat},${lng}
-                       &client_id=${__WEBPACK_IMPORTED_MODULE_1__ajax_secret___default.a.client_id}&client_secret=${__WEBPACK_IMPORTED_MODULE_1__ajax_secret___default.a.client_secret}
-                       &v=20170421&limit=10`;
+                       &client_id=${__WEBPACK_IMPORTED_MODULE_1__secret_secret___default.a.foursquare.client_id}
+                       &client_secret=${__WEBPACK_IMPORTED_MODULE_1__secret_secret___default.a.foursquare.client_secret}
+                       &v=20170421&limit=10&query=${title}`;
 
-   // Ajax call to Foursquare URL. Handle with promises.
-   __WEBPACK_IMPORTED_MODULE_0_es_ajax___default()(foursquareUrl)
-   .get()
-   .then(function (response) {
-     console.log(response)
-     // If everything went alright
-     if (response.status === 200){
-       let res = JSON.parse(response.response);
-       var place = res.response.venues[0];
+  var googleStreetPicsUrl = `https://maps.googleapis.com/maps/api/streetview?size=200x100
+                             &location=${lat},${lng}
+                             &fov=90&pitch=10
+                             &key=${__WEBPACK_IMPORTED_MODULE_1__secret_secret___default.a.google.api_key}`;
 
-       var template = setTemplate(marker, place);
+  // Ajax call to Foursquare URL. Handled with promises.
+  __WEBPACK_IMPORTED_MODULE_0_es_ajax___default()(foursquareUrl)
+  .get()
+  .then(function (response) {
+   // If everything went alright
+   if (response.status === 200){
+     let res = JSON.parse(response.response);
+     var place = res.response.venues[0];
 
-       removeLoader();
+     var template = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__infowindow_templates__["setTemplate"])(marker, place, googleStreetPicsUrl);
 
-       infoWindow.marker = marker;
-       infoWindow.setContent(template);
-       infoWindow.open(map, marker);
-     }
-   })
-   .catch(function (error) {
-     removeLoader();
-
-     var template = setTemplateError(marker)
+     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__loader__["removeLoader"])();
 
      infoWindow.marker = marker;
      infoWindow.setContent(template);
      infoWindow.open(map, marker);
+   }
+  })
+  .catch(function (error) {
+   __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__loader__["removeLoader"])();
 
-   })
+   var template = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__infowindow_templates__["setTemplateError"])(marker, googleStreetPicsUrl);
+
+   infoWindow.marker = marker;
+   infoWindow.setContent(template);
+   infoWindow.open(map, marker);
+
+  })
 }
 
-function setLoader (template) {
-  var body = document.getElementById('body');
-  var loaderBg = document.createElement('div');
-  var loader = document.createElement('div');
-
-  loaderBg.id = 'loader-bg';
-  loader.id = 'loader';
-
-  var screenSize = getScreenSize();
-
-  loader.style.top = screenSize[0] / 3 + 'px';
-  loader.style.left = screenSize[1] / 2 + 'px';
-
-  body.appendChild(loaderBg);
-  body.appendChild(loader);
-}
-
-function removeLoader () {
-  document.getElementById('loader').remove();
-  document.getElementById('loader-bg').remove();
-}
-
-// Returns screen size in an array, to place the loader properly in the center
-function getScreenSize () {
-  var arr = [];
-  arr.push(window.innerHeight)
-  arr.push(window.innerWidth)
-
-  return arr;
-}
-
-function setTemplate (marker, place) {
-
-  if (!place.url)
-    place.url = 'Website not available';
-
-  if (!place.contact.formattedPhone)
-    place.contact.formattedPhone = 'Phone number not available';
-
-  return `
-    <h3 class="title">${marker.title}</h3>
-    <p class="iw-web">${place.contact.formattedPhone}</p>
-    <p class="iw-web">${place.url}</p>
-  `;
-}
-
-function setTemplateError (marker) {
-  return `
-  <h3 class="title">${marker.title}</h3>
-  <p class="iw-web">There is been an error connecting with Foursquare api. Try again later.</p>
-  `
+function formatNames (name) {
+  // Replaces whitespaces with '+'
+  name = name.replace(/\s/g, "+");
+  return name;
 }
 
 
@@ -18016,18 +17982,7 @@ __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new AppViewModel(
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31), __webpack_require__(32)(module)))
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-// Foursquare api keys
-
-module.exports = {
-  client_id: 'LGF41RWXQZHAZ0LJRRPGN1XHMGDEYCCJAPSJHGB0WRGS4HWR',
-  client_secret: 'RPOO21YSZQFSMHYSWKZ1BLIL4MSN0YZGGS5A0X3OMBFBJQTY'
-}
-
-
-/***/ }),
+/* 13 */,
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -25198,6 +25153,101 @@ module.exports = function(module) {
 	}
 	return module;
 };
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports) {
+
+// Foursquare api keys
+
+module.exports = {
+  foursquare: {
+    client_id: 'LGF41RWXQZHAZ0LJRRPGN1XHMGDEYCCJAPSJHGB0WRGS4HWR',
+    client_secret: 'RPOO21YSZQFSMHYSWKZ1BLIL4MSN0YZGGS5A0X3OMBFBJQTY'
+  },
+  google: {
+    api_key: 'AIzaSyBu-puAmA3836qC88rlenY0lf3-gCsRLCo'
+  }
+}
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  setLoader,
+  removeLoader,
+  getScreenSize
+}
+
+function setLoader (template) {
+  // Creates loader and appends it. Styles in CSS file.
+  var body = document.getElementById('body');
+  var loaderBg = document.createElement('div');
+  var loader = document.createElement('div');
+
+  loaderBg.id = 'loader-bg';
+  loader.id = 'loader';
+
+  var screenSize = getScreenSize();
+
+  loader.style.top = screenSize[0] / 3 + 'px';
+  loader.style.left = screenSize[1] / 2 + 'px';
+
+  body.appendChild(loaderBg);
+  body.appendChild(loader);
+}
+
+function removeLoader () {
+  document.getElementById('loader').remove();
+  document.getElementById('loader-bg').remove();
+}
+
+// Returns screen size in an array, to place the loader properly in the center
+function getScreenSize () {
+  var arr = [];
+  arr.push(window.innerHeight)
+  arr.push(window.innerWidth)
+
+  return arr;
+}
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  setTemplate,
+  setTemplateError
+}
+
+function setTemplate (marker, place, imgUrl) {
+  // If there is no url
+  if (!place.url)
+    place.url = 'Website not available';
+
+  if (!place.contact.formattedPhone)
+    place.contact.formattedPhone = 'Phone number not available';
+
+  return `
+    <h3 class="title">${marker.title}</h3>
+    <img src="${imgUrl}" />
+    <p class="iw-phone">${place.contact.formattedPhone}</p>
+    <p class="iw-web">${place.url}</p>
+  `;
+}
+
+// Template appended when catching api error
+function setTemplateError (marker, imgUrl) {
+  return `
+  <h3 class="title">${marker.title}</h3>
+  <img class="iw-image" src="${imgUrl}" />
+  <p class="iw-error">There is been an error. Most likely this place has not been found by Foursquare.</p>
+  `;
+}
 
 
 /***/ })

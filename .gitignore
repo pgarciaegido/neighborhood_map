@@ -1,2 +1,2 @@
 node_modules
-./app/js/ajax/secret.js
+./app/js/secret/secret.js

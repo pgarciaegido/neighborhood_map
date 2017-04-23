@@ -82,6 +82,17 @@ button{
   z-index: 3;
 }
 
+/* Info window */
+.iw-error{
+  background-color: #FFD0D4;
+  padding: 3px;
+}
+
+.iw-image {
+  display: block;
+  margin: 0 auto;
+}
+
 /* LOADER */
 /* Courtesy of Luke Hass: https://projects.lukehaas.me/css-loaders/ */
 
