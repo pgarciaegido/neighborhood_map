@@ -41,6 +41,63 @@ button{
   display: none;
 }
 
+.title{
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.checkboxes {
+  padding: 10px;
+  background-color: #BAE4E5;
+  margin-bottom: 10px;
+}
+
+.checkboxes span {
+  font-size: 0.8em;
+}
+
+.author-place{
+  background-color: #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.author-place h3{
+  margin: 0;
+  margin-bottom: 5px;
+  pointer-events: none;
+
+}
+
+.author-place p {
+  margin: 0;
+  font-size: 0.8em;
+  pointer-events: none;
+}
+
+#loader-bg{
+  background-color: rgba(255,255,255,0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+}
+
+/* Info window */
+.iw-error{
+  background-color: #FFD0D4;
+  padding: 3px;
+}
+
+.iw-image {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Media queries */
 @media (max-width: 767px) {
   .container{
     display: block;
@@ -97,61 +154,7 @@ button{
   }
 }
 
-.title{
-  margin: 0;
-  margin-bottom: 10px;
-}
-
-.checkboxes {
-  padding: 10px;
-  background-color: #BAE4E5;
-  margin-bottom: 10px;
-}
-
-.checkboxes span {
-  font-size: 0.8em;
-}
-
-.author-place{
-  background-color: #eee;
-  padding: 10px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-.author-place h3{
-  margin: 0;
-  margin-bottom: 5px;
-  pointer-events: none;
-
-}
-
-.author-place p {
-  margin: 0;
-  font-size: 0.8em;
-  pointer-events: none;
-}
-
-#loader-bg{
-  background-color: rgba(255,255,255,0.3);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 3;
-}
-
-/* Info window */
-.iw-error{
-  background-color: #FFD0D4;
-  padding: 3px;
-}
-
-.iw-image {
-  display: block;
-  margin: 0 auto;
-}
+/* / Media queries */
 
 /* LOADER */
 /* Courtesy of Luke Hass: https://projects.lukehaas.me/css-loaders/ */

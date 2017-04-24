@@ -9,6 +9,10 @@
   "author": "Pablo Egido <pgarciaegido@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.4.0",
+    "uglify-js": "github:mishoo/UglifyJS2#harmony",
     "webpack": "^2.4.1"
   },
   "dependencies": {
