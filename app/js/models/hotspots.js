@@ -55,11 +55,13 @@ var hotspots = [
   },
 ];
 
+// Avoids some unexpected behaviour when exporting only variables.
 function returnHotspots () {
   return hotspots;
 }
 
 // Get services from hotspots
+// ** Nightlife, food, enterteinment...
 function getServices() {
   var serv = []
   var push = true;

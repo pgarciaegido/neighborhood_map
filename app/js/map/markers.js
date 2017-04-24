@@ -33,8 +33,7 @@ function setMarkers (map, infoWindow) {
   }
 }
 
-setTimeout(function () { console.log(markers)}, 2000);
-
+// Animates marker
 function bounceMarker (marker) {
   if (marker.getAnimation() !== null) {
     marker.setAnimation(null);

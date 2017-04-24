@@ -4,7 +4,7 @@ module.exports = {
   getScreenSize
 }
 
-function setLoader (template) {
+function setLoader () {
   // Creates loader and appends it. Styles in CSS file.
   var body = document.getElementById('body');
   var loaderBg = document.createElement('div');
@@ -15,6 +15,7 @@ function setLoader (template) {
 
   var screenSize = getScreenSize();
 
+  // It gets more centered dividing by 3 here.
   loader.style.top = screenSize[0] / 3 + 'px';
   loader.style.left = screenSize[1] / 2 + 'px';
 

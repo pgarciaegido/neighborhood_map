@@ -57,7 +57,7 @@ function AppViewModel(){
   }
 
 
-  // HIDES / SHOWS ALL =========================================================
+  // HIDES / SHOWS ALL
   // Hides all markers and empty observable array
   this.hideListings = function(){
     for (var i in markers) {

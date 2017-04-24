@@ -1,6 +1,8 @@
 # My neighborhood map :house:
 An interactive client webapp with some cool hotspots in my neighborhood, using Google maps and Foursquare APIs, and an MVVM design using knockout.js.
 
+![Map](http://i65.tinypic.com/29xsp5x.png)
+
 ## Current features
 * Display markers with the info from my models.
 * Offer further information when clicking in a marker, thanks to Google Street Imagery and Foursquare API.
@@ -25,6 +27,8 @@ webpack-dev-server
 ```
 
 On ./app/js/secret/secret.js are my keys for foursquare and google api request. Please, modify them and include your owns.
+
+For production, you can set your NODE_ENV to production and webpack will minify the JS bundle.
 
 ## Todos
 * Include feature for the user to keep their own places, and record them on localStorage.
