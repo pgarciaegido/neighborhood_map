@@ -4,7 +4,7 @@ module.exports = {
 }
 
 function setTemplate (marker, place, imgUrl) {
-  // If there is no url
+  // If there is no url or phone.
   if (!place.url)
     place.url = 'Website not available';
 
@@ -13,9 +13,10 @@ function setTemplate (marker, place, imgUrl) {
 
   return `
     <h3 class="title">${marker.title}</h3>
-    <img src="${imgUrl}" />
+    <img class="iw-image" src="${imgUrl}" />
     <p class="iw-phone">${place.contact.formattedPhone}</p>
     <p class="iw-web">${place.url}</p>
+    <h6>Provided by Foursquare</h6>
   `;
 }
 
