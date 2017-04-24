@@ -5,6 +5,8 @@ import { setMarkers } from './map/markers';
 import * as viewModel from './knockout/viewModel';
 import * as mobileMenu from './menu_mobile/menu_mobile';
 
+import styles from '../css/styles.css';
+
 
 /* google.maps is a GLOBAL variable, and its called directly on the HTML */
 

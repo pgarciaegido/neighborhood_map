@@ -48,6 +48,7 @@ function AppViewModel(){
   this.openInfowindow = function (data, event) {
     // Opens infowindow from list
     var title = event.target.getAttribute('datatitle');
+    console.log(markers)
     for (let i in markers) {
       if (markers[i].title === title) {
         setInfowindow(markers[i], window.infoWindow);

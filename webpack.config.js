@@ -1,5 +1,5 @@
 var path = require('path');
-var webpack = require('webpack');
+
 var PROD = process.env.NODE_ENV === 'production';
 
 module.exports = {
@@ -16,20 +16,13 @@ module.exports = {
   ] : [],
   module: {
     rules: [
-      // BABEL
+      // CSS
       {
-        // test uses regex for searching .js files
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['env']
-          }
-        }
+        // Styles get imported in ./app/js/app.js.
+        // Appends css styles right into <HEAD>.
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ],
       }
     ]
   }
 };
-
-console.log(process.env.NODE_ENV)

@@ -2,7 +2,6 @@ import { returnHotspots } from '../models/hotspots.js';
 import { setInfowindow } from './infowindow';
 import map from './render';
 
-
 export {
   setMarkers,
   bounceMarker,
@@ -33,6 +32,8 @@ function setMarkers (map, infoWindow) {
     markers.push(marker)
   }
 }
+
+setTimeout(function () { console.log(markers)}, 2000);
 
 function bounceMarker (marker) {
   if (marker.getAnimation() !== null) {
