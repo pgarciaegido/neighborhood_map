@@ -1,5 +1,5 @@
 import ko from 'knockout';
-import { markers, makeMarkerIcon } from '../map/markers';
+import { markers } from '../map/markers';
 import { returnHotspots, getServices } from '../models/hotspots';
 import { setInfowindow } from '../map/infowindow';
 import { infoWindow } from '../app';

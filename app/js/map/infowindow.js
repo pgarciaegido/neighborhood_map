@@ -2,6 +2,7 @@ import ajax from 'es-ajax';
 import secret from '../secret/secret';
 import { setLoader, removeLoader, getScreenSize } from './loader';
 import { setTemplate, setTemplateError } from './infowindow_templates';
+import { bounceMarker } from './markers';
 
 export {
   setInfowindow
@@ -9,7 +10,8 @@ export {
 
 // Displays infowindow, sets marker and template.
 function setInfowindow(marker, infoWindow) {
-
+  // Marker animation.
+  bounceMarker(marker);
   setLoader();
   // Gets marker coordinates
   var lat = marker.internalPosition.lat();
@@ -39,13 +41,21 @@ function setInfowindow(marker, infoWindow) {
 
      removeLoader();
 
+     // Stops marker animation after 2 seconds. 1900 make the animation smoother.
+     setTimeout(function () { bounceMarker(marker); }, 1900);
+
      infoWindow.marker = marker;
      infoWindow.setContent(template);
      infoWindow.open(map, marker);
+
+
    }
   })
   .catch(function (error) {
    removeLoader();
+
+   // Stops marker animation after 2 seconds. 1900 make the animation smoother.
+   setTimeout(function () { bounceMarker(marker); }, 1900);
 
    var template = setTemplateError(marker, googleStreetPicsUrl);
 
