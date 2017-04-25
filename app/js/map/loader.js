@@ -2,7 +2,7 @@ module.exports = {
   setLoader,
   removeLoader,
   getScreenSize
-}
+};
 
 function setLoader () {
   // Creates loader and appends it. Styles in CSS file.
@@ -31,8 +31,8 @@ function removeLoader () {
 // Returns screen size in an array, to place the loader properly in the center
 function getScreenSize () {
   var arr = [];
-  arr.push(window.innerHeight)
-  arr.push(window.innerWidth)
+  arr.push(window.innerHeight);
+  arr.push(window.innerWidth);
 
   return arr;
 }

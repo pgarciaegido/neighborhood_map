@@ -1,7 +1,7 @@
 module.exports = {
   setTemplate,
   setTemplateError
-}
+};
 
 function setTemplate (marker, place, imgUrl) {
   // If there is no url or phone.

@@ -6,7 +6,7 @@ export {
   setMarkers,
   bounceMarker,
   markers
-}
+};
 
 var markers = [];
 var hotspots = returnHotspots();
@@ -29,7 +29,7 @@ function setMarkers (map, infoWindow) {
       setInfowindow(this, infoWindow);
     });
 
-    markers.push(marker)
+    markers.push(marker);
   }
 }
 

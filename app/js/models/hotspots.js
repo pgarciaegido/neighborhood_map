@@ -1,7 +1,7 @@
 module.exports = {
   returnHotspots,
   getServices
-}
+};
 
 
 var hotspots = [
@@ -63,14 +63,14 @@ function returnHotspots () {
 // Get services from hotspots
 // ** Nightlife, food, enterteinment...
 function getServices() {
-  var serv = []
+  var serv = [];
   var push = true;
   for (let i in hotspots){
     let s = hotspots[i].service;
     for (let j in serv){
       if (s === serv[j]) push = false;
     }
-    if (push) serv.push(s)
+    if (push) serv.push(s);
   }
   return serv;
 }

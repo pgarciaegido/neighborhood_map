@@ -20,10 +20,10 @@ window.initMap = function() {
   // Set markers.
   setMarkers(map, window.infoWindow);
 
-}
+};
 
 // If google maps api fails.
 window.googleError = function() {
   var map = document.getElementById('map');
   map.innerHTML = '<h1 style="text-align: center;">Map could not be loaded.</h1>';
-}
+};

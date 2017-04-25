@@ -19,7 +19,7 @@ function AppViewModel(){
   this.populateCheckboxes = function () {
     self.services.forEach(function (service) {
       self.checkboxes.push(service);
-    })
+    });
   };
   this.populateCheckboxes();
 
@@ -37,9 +37,9 @@ function AppViewModel(){
     markers.forEach(function (marker) {
       if (marker.service === service) {
         self.checkboxes().indexOf(service) === -1 ? marker.setMap(null)
-                                                  : marker.setMap(map)
+                                                  : marker.setMap(map);
       }
-    })
+    });
     // UI does not work if those dealing with checkboxes do not return true
     return true;
   };
@@ -51,7 +51,7 @@ function AppViewModel(){
       if (marker.title === title) {
         setInfowindow(marker, window.infoWindow);
       }
-    })
+    });
   };
 
 
@@ -60,7 +60,7 @@ function AppViewModel(){
   this.hideListings = function(){
     markers.forEach(function (marker) {
       marker.setMap(null);
-    })
+    });
 
     this.checkboxes.removeAll();
   };
@@ -73,7 +73,7 @@ function AppViewModel(){
     markers.forEach(function (marker) {
       marker.setMap(map);
       bounds.extend(marker.position);
-    })
+    });
 
     map.fitBounds(bounds);
     this.populateCheckboxes();
@@ -83,7 +83,7 @@ function AppViewModel(){
   this.toggleMenu = function(){
     var interaction = document.getElementById('interaction');
     interaction.classList.toggle('interaction_mobile_on');
-  }
+  };
 }
 
 ko.applyBindings(new AppViewModel());

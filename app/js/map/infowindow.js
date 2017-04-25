@@ -6,7 +6,7 @@ import { bounceMarker } from './markers';
 
 export {
   setInfowindow
-}
+};
 
 // Displays infowindow, sets marker and template.
 function setInfowindow(marker, infoWindow) {
@@ -63,7 +63,7 @@ function setInfowindow(marker, infoWindow) {
    infoWindow.setContent(template);
    infoWindow.open(map, marker);
 
-  })
+ });
 }
 
 function formatNames (name) {
