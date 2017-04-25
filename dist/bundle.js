@@ -134,8 +134,7 @@ function setMarkers (map, infoWindow) {
   }
 }
 
-setTimeout(function () { console.log(markers)}, 2000);
-
+// Animates marker
 function bounceMarker (marker) {
   if (marker.getAnimation() !== null) {
     marker.setAnimation(null);
@@ -211,11 +210,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__map_render___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__map_render__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__map_markers__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__knockout_viewModel__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__menu_mobile_menu_mobile__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__menu_mobile_menu_mobile___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__menu_mobile_menu_mobile__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__css_styles_css__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__css_styles_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__css_styles_css__);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__css_styles_css__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__css_styles_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__css_styles_css__);
 
 
 
@@ -238,6 +234,12 @@ window.initMap = function() {
   // Set markers.
   __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__map_markers__["a" /* setMarkers */])(map, window.infoWindow);
 
+}
+
+// If google maps api fails.
+window.googleError = function() {
+  var map = document.getElementById('map');
+  map.innerHTML = '<h1 style="text-align: center;">Map could not be loaded.</h1>';
 }
 
 
@@ -390,11 +392,13 @@ var hotspots = [
   },
 ];
 
+// Avoids some unexpected behaviour when exporting only variables.
 function returnHotspots () {
   return hotspots;
 }
 
 // Get services from hotspots
+// ** Nightlife, food, enterteinment...
 function getServices() {
   var serv = []
   var push = true;
@@ -866,12 +870,11 @@ function AppViewModel(){
 
   // Fill checkboxes with services.
   this.populateCheckboxes = function () {
-    for (let i in self.services) {
-      self.checkboxes.push(self.services[i]);
-    }
-  }
-  this.populateCheckboxes()
-
+    self.services.forEach(function (service) {
+      self.checkboxes.push(service);
+    })
+  };
+  this.populateCheckboxes();
 
   this.checkVisibility = function (service) {
     // If checkboxes array contains service, return true (make it visible),
@@ -884,12 +887,12 @@ function AppViewModel(){
   this.handleMarkers = function (data, event) {
     // Hides or show markers when clicking
     var service = event.target.getAttribute('value');
-    for (let i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */]) {
-      if (__WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */][i].service === service) {
-        self.checkboxes().indexOf(service) === -1 ? __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */][i].setMap(null)
-                                                  : __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */][i].setMap(map)
+    __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */].forEach(function (marker) {
+      if (marker.service === service) {
+        self.checkboxes().indexOf(service) === -1 ? marker.setMap(null)
+                                                  : marker.setMap(map)
       }
-    }
+    })
     // UI does not work if those dealing with checkboxes do not return true
     return true;
   };
@@ -897,21 +900,20 @@ function AppViewModel(){
   this.openInfowindow = function (data, event) {
     // Opens infowindow from list
     var title = event.target.getAttribute('datatitle');
-    console.log(__WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */])
-    for (let i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */]) {
-      if (__WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */][i].title === title) {
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__map_infowindow__["a" /* setInfowindow */])(__WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */][i], window.infoWindow);
+    __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */].forEach(function (marker) {
+      if (marker.title === title) {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__map_infowindow__["a" /* setInfowindow */])(marker, window.infoWindow);
       }
-    }
-  }
+    })
+  };
 
 
-  // HIDES / SHOWS ALL =========================================================
+  // HIDES / SHOWS ALL
   // Hides all markers and empty observable array
   this.hideListings = function(){
-    for (var i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */]) {
-      __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */][i].setMap(null);
-    }
+    __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */].forEach(function (marker) {
+      marker.setMap(null);
+    })
 
     this.checkboxes.removeAll();
   };
@@ -921,33 +923,27 @@ function AppViewModel(){
   this.showListings = function(){
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
-    for (var i in __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */]) {
-      __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */][i].setMap(map);
-      bounds.extend(__WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */][i].position);
-    }
-    map.fitBounds(bounds);
+    __WEBPACK_IMPORTED_MODULE_1__map_markers__["c" /* markers */].forEach(function (marker) {
+      marker.setMap(map);
+      bounds.extend(marker.position);
+    })
 
+    map.fitBounds(bounds);
     this.populateCheckboxes();
   };
+
+  // Open/close mobile menu.
+  this.toggleMenu = function(){
+    var interaction = document.getElementById('interaction');
+    interaction.classList.toggle('interaction_mobile_on');
+  }
 }
 
 __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new AppViewModel());
 
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-var button = document.getElementById('burger_button');
-var interaction = document.getElementById('interaction');
-var mapContainer = document.getElementById('map_container');
-
-button.onclick = function () {
-  interaction.classList.toggle('interaction_mobile_on');
-}
-
-
-/***/ }),
+/* 13 */,
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18111,7 +18107,7 @@ module.exports = {
   getScreenSize
 }
 
-function setLoader (template) {
+function setLoader () {
   // Creates loader and appends it. Styles in CSS file.
   var body = document.getElementById('body');
   var loaderBg = document.createElement('div');
@@ -18122,6 +18118,7 @@ function setLoader (template) {
 
   var screenSize = getScreenSize();
 
+  // It gets more centered dividing by 3 here.
   loader.style.top = screenSize[0] / 3 + 'px';
   loader.style.left = screenSize[1] / 2 + 'px';
 

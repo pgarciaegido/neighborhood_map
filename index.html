@@ -8,13 +8,13 @@
 </head>
 <body id="body">
 
-  <div class="container">
+  <main class="container">
     <!-- INTERACTION  -->
-    <div class="title_only_mobile">
-      <img id="burger_button" src="./app/img/menu.svg" alt="Burguer Button" />
+    <nav class="title_only_mobile">
+      <img id="burger_button" src="./app/img/menu.svg" alt="Burguer Button" data-bind="click: toggleMenu" />
       <h2>Nuevos Ministerios | Madrid</h2>
-    </div>
-    <div class="interaction" id="interaction">
+    </nav>
+    <article class="interaction" id="interaction">
       <h2 class="title">Nuevos Ministerios | Madrid</h2>
       <div class="author-favs">
 
@@ -41,18 +41,18 @@
         </div>
 
       </div>
-
-    </div>
+    </article>
 
     <!-- MAP -->
-    <div id="map_container">
+    <article id="map_container">
       <div id="map"></div>
-    </div>
-  </div>
+    </article>
+
+  </main>
 
 
   <script src="./dist/bundle.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-puAmA3836qC88rlenY0lf3-gCsRLCo&callback=initMap"
-  async defer></script>
+  onerror="googleError()" async defer></script>
 </body>
 </html>

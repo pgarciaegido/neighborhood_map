@@ -17,12 +17,11 @@ function AppViewModel(){
 
   // Fill checkboxes with services.
   this.populateCheckboxes = function () {
-    for (let i in self.services) {
-      self.checkboxes.push(self.services[i]);
-    }
-  }
-  this.populateCheckboxes()
-
+    self.services.forEach(function (service) {
+      self.checkboxes.push(service);
+    })
+  };
+  this.populateCheckboxes();
 
   this.checkVisibility = function (service) {
     // If checkboxes array contains service, return true (make it visible),
@@ -35,12 +34,12 @@ function AppViewModel(){
   this.handleMarkers = function (data, event) {
     // Hides or show markers when clicking
     var service = event.target.getAttribute('value');
-    for (let i in markers) {
-      if (markers[i].service === service) {
-        self.checkboxes().indexOf(service) === -1 ? markers[i].setMap(null)
-                                                  : markers[i].setMap(map)
+    markers.forEach(function (marker) {
+      if (marker.service === service) {
+        self.checkboxes().indexOf(service) === -1 ? marker.setMap(null)
+                                                  : marker.setMap(map)
       }
-    }
+    })
     // UI does not work if those dealing with checkboxes do not return true
     return true;
   };
@@ -48,21 +47,20 @@ function AppViewModel(){
   this.openInfowindow = function (data, event) {
     // Opens infowindow from list
     var title = event.target.getAttribute('datatitle');
-    console.log(markers)
-    for (let i in markers) {
-      if (markers[i].title === title) {
-        setInfowindow(markers[i], window.infoWindow);
+    markers.forEach(function (marker) {
+      if (marker.title === title) {
+        setInfowindow(marker, window.infoWindow);
       }
-    }
-  }
+    })
+  };
 
 
   // HIDES / SHOWS ALL
   // Hides all markers and empty observable array
   this.hideListings = function(){
-    for (var i in markers) {
-      markers[i].setMap(null);
-    }
+    markers.forEach(function (marker) {
+      marker.setMap(null);
+    })
 
     this.checkboxes.removeAll();
   };
@@ -72,14 +70,20 @@ function AppViewModel(){
   this.showListings = function(){
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
-    for (var i in markers) {
-      markers[i].setMap(map);
-      bounds.extend(markers[i].position);
-    }
-    map.fitBounds(bounds);
+    markers.forEach(function (marker) {
+      marker.setMap(map);
+      bounds.extend(marker.position);
+    })
 
+    map.fitBounds(bounds);
     this.populateCheckboxes();
   };
+
+  // Open/close mobile menu.
+  this.toggleMenu = function(){
+    var interaction = document.getElementById('interaction');
+    interaction.classList.toggle('interaction_mobile_on');
+  }
 }
 
 ko.applyBindings(new AppViewModel());
